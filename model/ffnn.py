@@ -51,8 +51,19 @@ class FeedForwardNetwork:
 
     def predict(self, x):
         return self.forward_pass(x)[1][-1]
+        
+    def predict_batch(self, X):
+        Y = []
+        
+        for t in range(X.shape[0]):
+            Y.append(self.predict(X[t]))
+            
+        return np.array(Y)
 
     def fit_batch(self, X, Y, mask):
+        if X.shape[0] == 0:
+            return
+        
         # Computing current partial derivatives of cost wrt parameters
         partial_b = [np.zeros(b.shape, dtype=float) for b in self.b_]
         partial_W = [np.zeros(W.shape, dtype=float) for W in self.W_]
